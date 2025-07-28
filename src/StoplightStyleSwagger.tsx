@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import AsyncApiSection from "./components/AsyncApiSection";
 import Header from "./components/Header";
 import Modals, { ModalsProvider } from "./components/Modals";
@@ -9,12 +9,11 @@ import Sidebar from "./components/Sidebar";
 import SocketSection from "./components/SocketSection";
 import useHashUrlPath from "./hooks/useHashUrlPath";
 import useLoadSchema from "./hooks/useLoadSchema";
-import "./index.css";
 import { SocketManagerProvider } from "./hooks/useSocketIO";
 
+
 export default function StoplightStyleSwagger({
-    swaggerUrl,
-    asyncApiUrl,
+    swaggerUrl, asyncApiUrl,
 }: {
     swaggerUrl: string;
     asyncApiUrl: string;
@@ -69,8 +68,7 @@ export default function StoplightStyleSwagger({
                     ></Sidebar>
                     <main className="h-full grid grid-rows-[auto_1fr] flex-1 overflow-hidden">
                         <Header
-                            setSidebarCollapsed={setSidebarCollapsed}
-                        />
+                            setSidebarCollapsed={setSidebarCollapsed} />
 
                         {/* content */}
 
@@ -79,8 +77,7 @@ export default function StoplightStyleSwagger({
                                 <div className="overflow-y-auto flex-1">
                                     <OverviewSection
                                         apiSpec={swaggerSchema}
-                                        asyncApiSpec={asyncApiSchema}
-                                    />
+                                        asyncApiSpec={asyncApiSchema} />
                                 </div>
                             )}
                             {hashPath.startsWith("#REST") && (
@@ -88,8 +85,7 @@ export default function StoplightStyleSwagger({
                             )}
                             {hashPath.startsWith("#AsyncAPI") && (
                                 <AsyncApiSection
-                                    asyncApiSpec={asyncApiSchema}
-                                />
+                                    asyncApiSpec={asyncApiSchema} />
                             )}
                             {hashPath.startsWith("#SCHEMA") && (
                                 <SchemasSection apiSpec={swaggerSchema}></SchemasSection>
@@ -111,3 +107,4 @@ export default function StoplightStyleSwagger({
         </ModalsProvider>
     );
 }
+

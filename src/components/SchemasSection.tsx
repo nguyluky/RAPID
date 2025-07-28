@@ -13,10 +13,11 @@ export default function SchemasSection({
     apiSpec,
 }: SchemasSectionProps) {
     const { hashPath, updateHashPath } = useHashUrlPath()
-    const selectedSchema = hashPath.replace('#SCHEMAS', '')
 
     const schemas = apiSpec?.components?.schemas || {}
     const schemaNames = Object.keys(schemas)
+    const schemaName = hashPath.startsWith('#SCHEMAS') ? hashPath.replace('#SCHEMAS-', '') : ''
+    const selectedSchema = schemaName;
 
     const handleSchemaClick = (schemaName: string) => {
         const newPath = selectedSchema === schemaName ? '#SCHEMAS' : `#SCHEMAS${schemaName}`
@@ -25,7 +26,7 @@ export default function SchemasSection({
 
     const generateExample = (schema: any): any => {
         if (!schema) return null
-        
+
         switch (schema.type) {
             case 'object':
                 const example: any = {}
@@ -54,66 +55,23 @@ export default function SchemasSection({
             {/* Left Panel - Schema List & Selected Schema Details */}
             <div className="flex-1 xl:w-1/2 xl:border-r border-slate-200 flex flex-col">
                 {/* Schema List */}
-                <div className="border-b border-slate-200 p-4">
-                    <h2 className="text-lg font-semibold text-slate-900 mb-4">Schemas ({schemaNames.length})</h2>
-                    
-                    {(schemaNames.length === 0 && false) ? (
-                        <p className="text-slate-500 text-sm">No schemas available</p>
-                    ) : (
-                        <ScrollArea className="max-h-40">
-                            <div className="space-y-2">
-                                {schemaNames.map(schemaName => (
-                                    <div
-                                        key={schemaName}
-                                        className={cn(
-                                            "p-3 rounded-lg border cursor-pointer transition-colors",
-                                            selectedSchema === schemaName
-                                                ? "bg-blue-50 border-blue-200 text-blue-900"
-                                                : "bg-white border-slate-200 hover:bg-slate-50"
-                                        )}
-                                        onClick={() => handleSchemaClick(schemaName)}
-                                    >
-                                        <div className="flex items-center justify-between">
-                                            <span className="font-medium text-sm">{schemaName}</span>
-                                            <span className="text-xs text-slate-500">
-                                                {schemas[schemaName]?.type || 'object'}
-                                            </span>
-                                        </div>
-                                        {schemas[schemaName]?.description && (
-                                            <p className="text-xs text-slate-600 mt-1 truncate">
-                                                {schemas[schemaName].description}
-                                            </p>
-                                        )}
-                                    </div>
-                                ))}
-                            </div>
-                        </ScrollArea>
-                    )}
+                <div className="border-b border-slate-200 p-4 flex items-center justify-between">
+                    <h3 className="font-semibold text-slate-900 ">
+                        {schemaName}
+                    </h3>
+                    <span className="text-xs text-slate-500">
+                        {schemas[schemaName]?.type || 'object'}
+                    </span>
                 </div>
 
                 {/* Selected Schema Details */}
                 <div className="flex-1 overflow-y-auto">
                     {selectedSchema && schemas[selectedSchema] ? (
                         <div className="p-4">
-                            <div className="mb-4">
-                                <h3 className="text-xl font-bold text-slate-900 mb-2">{selectedSchema}</h3>
-                                {schemas[selectedSchema].description && (
-                                    <p className="text-slate-600 text-sm mb-4">
-                                        {schemas[selectedSchema].description}
-                                    </p>
-                                )}
-                            </div>
-                            
-                            <div className="bg-slate-50 rounded-lg border">
-                                <div className="p-3 border-b border-slate-200">
-                                    <h4 className="font-semibold text-slate-900">Schema Structure</h4>
-                                </div>
-                                <div className="p-4">
-                                    <JsonSchemaViewer 
-                                        schema={schemas[selectedSchema]} 
-                                    />
-                                </div>
-                            </div>
+
+                            <JsonSchemaViewer
+                                schema={schemas[selectedSchema]}
+                            />
                         </div>
                     ) : (
                         <div className="flex-1 flex items-center justify-center p-8">
@@ -138,10 +96,10 @@ export default function SchemasSection({
                 <div className="border-b border-slate-200 p-4 bg-white">
                     <h3 className="font-semibold text-slate-900">Example</h3>
                 </div>
-                
+
                 <div className="flex-1 overflow-y-auto p-4">
                     {selectedSchema && schemas[selectedSchema] ? (
-                        <div className="bg-white rounded-lg border shadow-sm">
+                        <div className="bg-white rounded-lg border shadow-sm border-slate-200">
                             <div className="p-3 border-b border-slate-200 bg-slate-50 rounded-t-lg">
                                 <h4 className="font-medium text-slate-900">JSON Example</h4>
                             </div>
